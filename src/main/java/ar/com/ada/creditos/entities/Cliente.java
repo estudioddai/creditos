@@ -87,7 +87,7 @@ public class Cliente {
     public List <Prestamo> getPrestamos(){
         return prestamos;
     }
-    public void setPretamos(List<Prestamo> prestamos){
+    public void setPretamos(List <Prestamo> prestamos){
         this.prestamos =prestamos;
 
     }

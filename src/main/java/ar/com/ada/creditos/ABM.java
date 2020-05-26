@@ -98,9 +98,9 @@ public class ABM {
         if (domAlternativo != null)
             cliente.setDomicilioAlternativo(domAlternativo);
 
-            
 
-        Prestamos prestamo =new Prestamos ();
+
+        Prestamo prestamo =new Prestamo ();
         BigDecimal importePrestamo = new BigDecimal(5000);
         prestamo.setImporte(importePrestamo);
         prestamo.setFecha(new Date());
