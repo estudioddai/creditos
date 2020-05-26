@@ -1,8 +1,11 @@
 package ar.com.ada.creditos.entities;
 
+import java.util.*;
+
 import javax.persistence.*;
 
 import ar.com.ada.creditos.excepciones.*;
+import javassist.expr.NewArray;
 
 @Entity
 @Table(name = "cliente")
@@ -16,6 +19,11 @@ public class Cliente {
     private String domicilio;
     @Column(name = "domicilio_alternativo")
     private String domicilioAlternativo;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch =
+    FetchType.EAGER)
+    private List<Prestamo> prestamos = new ArrayList<>();
+
 
     public Cliente(String nombre) {
         this.nombre = nombre;
@@ -76,4 +84,11 @@ public class Cliente {
         this.domicilioAlternativo = domicilioAlternativo;
     }
 
+    public List <Prestamo> getPrestamos(){
+        return prestamos;
+    }
+    public void setPretamos(List<Prestamo> prestamos){
+        this.prestamos =prestamos;
+
+    }
 }
