@@ -80,4 +80,21 @@ public class Prestamo {
         this.cliente.getPrestamos().add(this);
     }
 
+    public Prestamo() {
+    }
+    public Prestamo(int prestamoId, BigDecimal importe, Date fecha, int cuotas, Date fechaAlta, Cliente cliente) {
+        this.PrestamoId = prestamoId;
+        this.importe = importe;
+        this.fecha = fecha;
+        this.cuotas = cuotas;
+        this.fechaAlta = fechaAlta;
+        this.cliente = cliente;
+    }
+
+	public String getPrestamoId() {
+		return null;
+	}
+
+
+
 }

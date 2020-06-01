@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.text.DateFormatter;
+
 import org.hibernate.exception.ConstraintViolationException;
 
 import ar.com.ada.creditos.entities.*;
@@ -16,12 +18,14 @@ public class ABM {
     public static Scanner Teclado = new Scanner(System.in);
 
     protected ClienteManager ABMCliente = new ClienteManager();
+    protected PrestamoManager ABMPrestamo = new PrestamoManager();
 
     public void iniciar() throws Exception {
 
         try {
 
             ABMCliente.setup();
+            ABMPrestamo.setup();
 
             printOpciones();
 
@@ -54,6 +58,13 @@ public class ABM {
 
                     case 5:
                         listarPorNombre();
+                        break;
+
+                    case 6:
+                        listarPrestamos();
+
+                    case 7:
+                        nuevoPrestamo();
                         break;
 
                     default:
@@ -98,17 +109,13 @@ public class ABM {
         if (domAlternativo != null)
             cliente.setDomicilioAlternativo(domAlternativo);
 
-
-
-        Prestamo prestamo =new Prestamo ();
+        Prestamo prestamo = new Prestamo();
         BigDecimal importePrestamo = new BigDecimal(5000);
         prestamo.setImporte(importePrestamo);
         prestamo.setFecha(new Date());
         prestamo.setFechaAlta(new Date());
-        prestamo.setCuotas(10);
+        prestamo.setCuotas(10); // le vamos a dar 10 cuotas por defecto
         prestamo.setCliente(cliente);
-
-
 
         ABMCliente.create(cliente);
 
@@ -244,17 +251,67 @@ public class ABM {
         }
     }
 
+    public void listarPrestamos() {
+
+        List<Prestamo> todos = ABMPrestamo.buscarTodosPrestamos();
+        for (Prestamo p : todos) {
+            mostrarPrestamo(p);
+        }
+    }
+
     public void mostrarCliente(Cliente cliente) {
 
-        System.out.print("Id: " + cliente.getClienteId() + " Nombre: " + cliente.getNombre()
-        + " DNI: " + cliente.getDni()
-        + " Domicilio: " + cliente.getDomicilio());
+        System.out.print("Id: " + cliente.getClienteId() + " Nombre: " + cliente.getNombre() + " DNI: "
+                + cliente.getDni() + " Domicilio: " + cliente.getDomicilio());
 
         if (cliente.getDomicilioAlternativo() != null)
             System.out.println(" Alternativo: " + cliente.getDomicilioAlternativo());
         else
             System.out.println();
     }
+
+    public void mostrarPrestamo(Prestamo prestamo) {
+        System.out.println("Id: " + prestamo.getPrestamoId() + " Importe:" + prestamo.getImporte() + " Cuotas: "
+                + prestamo.getCuotas() + " Fecha " + prestamo.getFechaAlta());
+
+    }
+
+    public void nuevoPrestamo() {
+        cargarUnPrestamo();
+    }
+
+    public void cargarUnPrestamo(){
+        Prestamo prestamo = new Prestamo();
+        System.out.println("Inserte el id del Cliente: ");
+        int idDeCliente = Teclado.nextInt();
+        Teclado.nextLine();
+        prestamo.setCliente(ABMCliente.buscarPorIdCliente(idDeCliente));
+        System.out.println("Inserte el importe del prestamo: ");
+        BigDecimal importe =Teclado.nextBigDecimal();
+        Teclado.nextLine();
+        prestamo.setImporte(importe);
+        System.out.println("Inserte la cantidad de cuotas: ");
+        int cuotas = Teclado.nextInt();
+        Teclado.nextLine();
+        prestamo.setCuotas(cuotas);
+        System.out.println("Inserte la fecha del prestamo: ");
+        System.out.println("Inserte el Año : ");
+        int AnioAlta = Teclado.nextInt();
+        Teclado.nextLine();
+        System.out.println("Inserte el mes : ");
+        int mesAlta  = Teclado.nextInt();
+        Teclado.nextLine();
+        System.out.println("Inserte el Dia : ");
+        int diaAlta = Teclado.nextInt();
+        Teclado.nextLine();
+        prestamo.setFecha(new Date(AnioAlta,mesAlta,diaAlta));
+        prestamo.setFechaAlta(new Date());
+
+        ABMPrestamo.create(prestamo);
+        System.out.println("Prestamo creado con exito");
+    }
+
+
 
     public static void printOpciones() {
         System.out.println("=======================================");
@@ -264,6 +321,8 @@ public class ABM {
         System.out.println("3. Para modificar un cliente.");
         System.out.println("4. Para ver el listado.");
         System.out.println("5. Buscar un cliente por nombre especifico(SQL Injection)).");
+        System.out.println("6. Listado de Prestamos");
+        System.out.println("7. Agregar un prestamo");
         System.out.println("0. Para terminar.");
         System.out.println("");
         System.out.println("=======================================");
