@@ -135,7 +135,7 @@ public class ClienteManager {
     }
 
 	public Cliente buscarPorIdCliente(int idDeCliente) {
-		return null;
+		return this.read(idDeCliente);
 	}
 
 }
