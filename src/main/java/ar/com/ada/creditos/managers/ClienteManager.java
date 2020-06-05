@@ -135,7 +135,15 @@ public class ClienteManager {
     }
 
 	public Cliente buscarPorIdCliente(int idDeCliente) {
-		return this.read(idDeCliente);
+
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createNativeQuery("Select * from cliente where cliente_id ='" + idDeCliente + "' ", Cliente.class);
+
+        Cliente clientesporId = (Cliente) query.getSingleResult();
+
+        return clientesporId;
+        
 	}
 
 }
